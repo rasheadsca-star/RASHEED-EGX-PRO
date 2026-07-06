@@ -1,7 +1,7 @@
 {
   "name": "EGX Pro Hub",
   "short_name": "EGX Pro",
-  "description": "EGX Pro Hub market intelligence terminal",
+  "description": "EGX Pro Hub — public delayed EGX market intelligence with strict investment trust governor.",
   "start_url": "./?app=pwa",
   "scope": "./",
   "display": "standalone",

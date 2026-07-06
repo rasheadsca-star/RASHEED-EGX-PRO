@@ -3693,6 +3693,84 @@ function renderRecommendationValidationPanel(){
   }catch(e){}
 })();
 
+
+
+/* ===================== V9.9.0 Investment Trust Governor UI ===================== */
+(function v990TrustGovernorStyle(){
+  try{
+    const style=document.createElement('style');
+    style.textContent=`
+      .trust990-banner{border:1px solid rgba(251,191,36,.35);background:linear-gradient(135deg,rgba(245,158,11,.16),rgba(14,165,233,.08));border-radius:18px;padding:13px 14px;margin:0 0 12px;line-height:1.8;color:#eaf6ff}
+      .trust990-banner.good{border-color:rgba(34,197,94,.38);background:linear-gradient(135deg,rgba(34,197,94,.14),rgba(14,165,233,.07))}.trust990-banner.bad{border-color:rgba(239,68,68,.38);background:linear-gradient(135deg,rgba(239,68,68,.14),rgba(245,158,11,.07))}
+      .trust990-grid{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:10px;margin-bottom:12px}.trust990-card{background:rgba(7,19,38,.78);border:1px solid rgba(119,169,235,.22);border-radius:16px;padding:12px;min-height:88px}.trust990-card span{display:block;color:#9fb5d6;font-size:12px;font-weight:850}.trust990-card b{display:block;font-size:24px;margin-top:6px;color:#fff}.trust990-card small{display:block;color:#93a9c9;margin-top:5px;line-height:1.5}
+      .trust990-pill{display:inline-flex;align-items:center;justify-content:center;border-radius:999px;padding:5px 9px;border:1px solid rgba(148,163,184,.3);font-weight:950;font-size:11px}.trust990-pill.approved{background:rgba(34,197,94,.14);border-color:rgba(34,197,94,.38);color:#86efac}.trust990-pill.conditional{background:rgba(14,165,233,.14);border-color:rgba(14,165,233,.38);color:#93c5fd}.trust990-pill.watch_only{background:rgba(245,158,11,.14);border-color:rgba(245,158,11,.38);color:#fcd34d}.trust990-pill.blocked{background:rgba(239,68,68,.14);border-color:rgba(239,68,68,.38);color:#fca5a5}
+      .trust990-table{min-width:1180px!important}.trust990-table td{white-space:normal!important;line-height:1.6!important;vertical-align:top!important}.trust990-reason{max-width:420px;color:#dbeafe}.trust990-warnings{color:#fde68a}.trust990-blocks{color:#fecaca}.trust990-rules{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}.trust990-rule{border:1px solid rgba(119,169,235,.16);background:rgba(15,23,42,.45);border-radius:14px;padding:10px;color:#dbeafe}.trust990-rule b{display:block;color:#fff;margin-bottom:4px}
+      @media(max-width:1050px){.trust990-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.trust990-rules{grid-template-columns:1fr}.trust990-card b{font-size:20px}}
+    `;
+    document.head.appendChild(style);
+  }catch(e){}
+})();
+function v990TrustData(){return EGX.trustGovernor||{};}
+function v990TrustRows(){const d=v990TrustData();return Array.isArray(d.rows)?d.rows:[];}
+function v990TrustPill(t){const map={approved:'جاهز للمراجعة',conditional:'مشروط',watch_only:'مراقبة فقط',blocked:'محجوب'};return `<span class="trust990-pill ${esc(t||'watch_only')}">${esc(map[t]||t||'مراقبة')}</span>`}
+function v990GlobalBanner(){
+  const d=v990TrustData(), g=d.global||{}, warnings=Array.isArray(g.warnings)?g.warnings:[];
+  const cls=g.executionAllowedGlobally?'good':warnings.length?'bad':'';
+  return `<div class="trust990-banner ${cls}"><b>وضع التوصيات الاستثمارية:</b> ${g.executionAllowedGlobally?'مسموح بعرض مرشحين للمراجعة البشرية':'مقيد للمراقبة فقط حتى تتحسن جودة البيانات'}<br>${warnings.length?`<span class="trust990-warnings">${warnings.map(esc).join(' — ')}</span>`:'لا توجد قيود عامة حالية.'}<br><small>البيانات عامة/متأخرة، والنتيجة Candidate Review وليست أمر شراء أو بيع.</small></div>`;
+}
+function renderTrustGovernor(){
+  const d=v990TrustData(), s=d.summary||{}, g=d.global||{}, rows=v990TrustRows();
+  return `${header('بوابة موثوقية التوصيات','الطبقة النهائية التي تمنع أي توصية شراء قبل سلامة السعر، كفاية التاريخ، قوة المصادر، والتحقق من الأداء')}${quickJump()}${v990GlobalBanner()}
+  <section class="trust990-grid">
+    ${kpi('جاهز للمراجعة',fmt0(s.approved||0),'مرشح فقط وليس أمر تنفيذ')}
+    ${kpi('مشروط',fmt0(s.conditional||0),'يحتاج تأكيد إضافي')}
+    ${kpi('مراقبة فقط',fmt0(s.watchOnly||0),'بيانات غير مكتملة')}
+    ${kpi('محجوب',fmt0(s.blocked||0),'سعر/تاريخ/مصادر غير صالحة',num(s.blocked)>0)}
+    ${kpi('حجب الأسعار',g.priceBlockedPct==null?'-':fmt0(g.priceBlockedPct)+'%','من Price Reconciliation',num(g.priceBlockedPct)>35)}
+    ${kpi('Confidence Guard',fmt0(g.confidenceGuardScore||0)+'%','حارس الثقة',num(g.confidenceGuardScore)<75)}
+  </section>
+  <section class="panel"><h3>قواعد السماح بالتوصية</h3><div class="trust990-rules">
+    <div class="trust990-rule"><b>1) السعر</b>لا يسمح إلا بسعر آمن من price-reconciliation بدون conflict/stale/precision risk.</div>
+    <div class="trust990-rule"><b>2) التاريخ</b>تنفيذ المراجعة يحتاج ${fmt0(d.rules?.strictMinHistoryExecution||20)} جلسة على الأقل؛ أقل من ذلك مراقبة فقط.</div>
+    <div class="trust990-rule"><b>3) المصادر</b>قوة أدلة لا تقل عن ${fmt0(d.rules?.strictMinSourceStrength||65)}% مع فلترة رموز EGX الرسمية.</div>
+    <div class="trust990-rule"><b>4) الأداء</b>لا يتم تضخيم الاحتمالات قبل وجود عينة نتائج مغلقة كافية.</div>
+  </div></section>
+  <section class="panel" style="margin-top:12px"><h3>جدول القرار النهائي <span>${fmt0(rows.length)}</span></h3>
+    <div class="tablewrap"><table class="compact-table trust990-table"><thead><tr><th>#</th><th>الرمز</th><th>الحالة</th><th>السعر</th><th>الثقة المحكومة</th><th>تاريخ</th><th>مصادر</th><th>R/R</th><th>القرار</th><th>الأسباب</th></tr></thead><tbody>${rows.map((r,i)=>`<tr><td>${i+1}</td><td><b>${esc(r.symbol)}</b><br><small>${esc(r.name||'')}</small></td><td>${v990TrustPill(r.trustTier)}</td><td>${esc(r.priceDisplay||fmt(r.price))}<br><small>${esc(r.priceState||'')}</small></td><td><b>${fmt0(r.targetProbability)}%</b><br><small>${esc(r.grade||'')}</small></td><td>${fmt0(r.historySessions)}/50</td><td>${r.sourceStrengthScore==null?'-':fmt0(r.sourceStrengthScore)+'%'}</td><td>${fmt(r.rr)}</td><td>${esc(r.finalDecision||r.recommendation||'')}</td><td class="trust990-reason"><div>${esc(r.why||'')}</div>${(r.blocks||[]).length?`<div class="trust990-blocks">حجب: ${r.blocks.map(esc).join('، ')}</div>`:''}${(r.warnings||[]).length?`<div class="trust990-warnings">تنبيهات: ${r.warnings.map(esc).join('، ')}</div>`:''}</td></tr>`).join('')||'<tr><td colspan="10" class="muted">شغّل Workflow لتوليد بوابة الثقة.</td></tr>'}</tbody></table></div>
+  </section>`;
+}
+const __v990OldSclass = sclass;
+sclass=function(r){
+  const tier=String(r.trustTier||'');
+  if(r.executionAllowed===true || tier==='approved') return 'buy';
+  if(tier==='conditional' || r.reviewAllowed===true) return 'near';
+  if(tier==='blocked' || r.executionAllowed===false && /blocked|محجوب|ممنوع|استبعاد/i.test(String(r.signal||r.recommendation||r.finalDecision||''))) return 'risk';
+  return 'watch';
+};
+const __v990OldQuickJump=quickJump;
+quickJump=function(){
+  const base=[['home','⌂ الرئيسية'],['trustGovernor','🛡 بوابة الثقة'],['decisionBoard','◎ القرار الموحد'],['recommendationValidation','☑ تحقق التوصيات'],['priceSourceAudit','⇆ مصدر السعر'],['rankingEngine','≡ الأولويات'],['dataOps','☷ تدقيق البيانات'],['portfolio','◈ المحفظة']];
+  return `<div class="screen-jump v894-jump">${base.map(i=>`<button data-screen="${i[0]}" class="${EGX.screen===i[0]?'active':''}">${i[1]}</button>`).join('')}</div>`;
+};
+const __v990OldSide=side;
+side=function(){
+  const nav=[['home','الرئيسية التنفيذية','⌂'],['trustGovernor','بوابة موثوقية التوصيات','🛡'],['decisionBoard','القرار الموحد','◎'],['enginesConsole','لوحة التشغيل','⚙'],['recommendationValidation','تحقق التوصيات','☑'],['priceSourceAudit','تدقيق مصدر السعر','⇆'],['preSession','فحص قبل الجلسة','✅'],['dataOps','مركز تدقيق البيانات','▤'],['sourceVerify','تحقق الجلب','🔎'],['priceReconcile','تدقيق الأسعار','⇆'],['dailyOpportunities','الفرص اليومية','◎'],['rankingEngine','محرك الأولويات','≡'],['dashboard','لوحة السوق','⌁'],['portfolio','المحفظة والتقارير الذكية','◈'],['portfolioDecision','قرارات المحفظة','⚖'],['alertsCenter','مركز التنبيهات','🚨'],['dailyBrief','تقرير القرار اليومي','▧'],['stockSearch','بحث وتحليل سهم','⌕'],['sessionMemory','ذاكرة الجلسات','▣'],['historyBackfill','استكمال التاريخ','⏳'],['settings','الإعدادات','⚙']];
+  return `<aside class="side"><div class="brand"><div class="logo">EGX</div><div><h1>EGX Pro Hub</h1><div class="sub">V9.9 Trust Governor</div></div></div><div class="statusbar"><span class="live">بوابة الثقة مفعلة</span><span>${new Date().toLocaleDateString('en-GB')}</span></div><nav class="nav">${nav.map(n=>`<button data-screen="${n[0]}" class="${EGX.screen===n[0]?'active':''}"><span>${n[2]}</span>${n[1]}</button>`).join('')}</nav></aside>`;
+};
+const __v990OldContent=content;
+content=function(){if(EGX.screen==='trustGovernor')return renderTrustGovernor();return __v990OldContent();};
+const __v990OldInit=init;
+init=async function(){
+  await __v990OldInit();
+  try{
+    const [tg,air]=await Promise.all([loadJson('data/investment-trust-governor.json',{}),loadJson('data/actionable-investment-recommendations.json',{})]);
+    EGX.trustGovernor=tg||{};EGX.actionableInvestment=air||{};
+    if(tg && Array.isArray(tg.rows) && tg.rows.length){EGX.rows=tg.rows.map(normalizeRow).filter(Boolean);EGX.selected=(sorted()[0]||{}).symbol||EGX.selected;}
+    console.log('V9.9 Trust Governor loaded', tg&&tg.summary);
+    render();
+  }catch(e){console.warn('V9.9 trust governor load skipped',e)}
+};
+
 init().catch(e=>{
   console.error("EGX init failed", e);
   const app=document.getElementById("app");
