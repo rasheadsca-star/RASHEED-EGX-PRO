@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>EGX Pro Hub — Professional Terminal V8.10.1 Multi-Source Intelligence</title>
+  <title>EGX Pro Hub — V9.10 Mubasher Market Scan + Trust Governor</title>
   <style>
     :root{
       --bg:#050914;--bg2:#071326;--card:#08182d;--card2:#0a1d36;
@@ -1003,8 +1003,8 @@ function side(){const nav=[
 ["confidenceGuard","حارس الثقة","🛡"],
 ["settings","الإعدادات","⚙"],
 ["mobile","موبايل","▣"]
-];return`<aside class="side"><div class="brand"><div class="logo">EGX</div><div><h1>EGX Pro Hub</h1><p>Professional Terminal V8.10.1 Multi-Source Intelligence</p></div></div><div class="nav-title">لوحة التحكم</div><nav class="nav">${nav.map(n=>`<button data-screen="${n[0]}" class="${EGX.screen===n[0]?"active":""}"><span>${n[1]}</span><span class="ico">${n[2]}</span></button>`).join("")}</nav><div class="footer"><div class="live">متصل</div><div class="muted" style="margin-top:8px">بيانات عامة ومتأخرة — مساعد قرار فقط.</div><button class="btn warn" id="classicBtn" style="margin-top:10px;width:100%">الوضع الكلاسيكي</button></div></aside>`}
-function header(title,sub){const last=EGX.source.generatedAt||EGX.source.lastSuccessAt||EGX.market.updatedAt||new Date().toISOString();return`<div class="head"><div><h2>${title}</h2><p>${sub}</p></div><div class="actions"><button class="btn primary" id="refresh">⚡ تحديث البيانات</button><button class="btn" id="export">تصدير CSV</button><button class="btn" onclick="window.print()">طباعة</button><button class="btn warn" id="classicTop">الشكل الكلاسيكي</button></div></div><div class="chips"><span class="chip"><i class="dot"></i> نطاق التغطية: السوق المصري</span><span class="chip warn"><i class="dot"></i> وضع المصدر: Public Delayed</span><span class="chip info"><i class="dot"></i> آخر تحديث: ${esc(new Date(last).toLocaleString("en-GB"))}</span><span class="chip info"><i class="dot"></i> الكاش: ${fmt0(EGX.source.cacheRows||EGX.rows.length)} / ${fmt0(EGX.source.totalUniverse||EGX.rows.length)}</span><span class="chip"><i class="dot"></i> جودة البيانات: ${fmt0(EGX.source.avgDataQuality||100)}%</span><span class="chip info"><i class="dot"></i> تاريخ 50 جلسة: ${fmt0((EGX.historyHealth&&EGX.historyHealth.symbolsWithComplete50)||0)} سهم</span><span class="chip"><i class="dot"></i> V8.10.1 Multi-Source Intelligence</span></div>`}
+];return`<aside class="side"><div class="brand"><div class="logo">EGX</div><div><h1>EGX Pro Hub</h1><p>V9.10 Mubasher Market Scan</p></div></div><div class="nav-title">لوحة التحكم</div><nav class="nav">${nav.map(n=>`<button data-screen="${n[0]}" class="${EGX.screen===n[0]?"active":""}"><span>${n[1]}</span><span class="ico">${n[2]}</span></button>`).join("")}</nav><div class="footer"><div class="live">متصل</div><div class="muted" style="margin-top:8px">بيانات عامة ومتأخرة — مساعد قرار فقط.</div><button class="btn warn" id="classicBtn" style="margin-top:10px;width:100%">الوضع الكلاسيكي</button></div></aside>`}
+function header(title,sub){const last=EGX.source.generatedAt||EGX.source.lastSuccessAt||EGX.market.updatedAt||new Date().toISOString();return`<div class="head"><div><h2>${title}</h2><p>${sub}</p></div><div class="actions"><button class="btn primary" id="refresh">⚡ تحديث البيانات</button><button class="btn" id="export">تصدير CSV</button><button class="btn" onclick="window.print()">طباعة</button><button class="btn warn" id="classicTop">الشكل الكلاسيكي</button></div></div><div class="chips"><span class="chip"><i class="dot"></i> نطاق التغطية: السوق المصري</span><span class="chip warn"><i class="dot"></i> وضع المصدر: Public Delayed</span><span class="chip info"><i class="dot"></i> آخر تحديث: ${esc(new Date(last).toLocaleString("en-GB"))}</span><span class="chip info"><i class="dot"></i> الكاش: ${fmt0(EGX.source.cacheRows||EGX.rows.length)} / ${fmt0(EGX.source.totalUniverse||EGX.rows.length)}</span><span class="chip"><i class="dot"></i> جودة البيانات: ${fmt0(EGX.source.avgDataQuality||100)}%</span><span class="chip info"><i class="dot"></i> تاريخ 50 جلسة: ${fmt0((EGX.historyHealth&&EGX.historyHealth.symbolsWithComplete50)||0)} سهم</span><span class="chip"><i class="dot"></i> V9.10 Mubasher Market Scan</span></div>`}
 function kpis(){const p=pulse();const hs=historyGlobalStats();return`<section class="kpis">${kpi("عدد الفرص",fmt0(p.rows),"Universe "+fmt0(EGX.source.totalUniverse||p.rows))}${kpi("سجل 50 جلسة",fmt0(hs.with50),`متوسط ${fmt0(hs.avg)} جلسة`)}${kpi("سجل فعلي جزئي",fmt0(hs.withAny),`من ${fmt0(hs.total)} سهم`)}${kpi("فرص تخفيف مخاطر",fmt0(p.risk),"راجع الوقف",true)}${kpi("متوسط الثقة",fmt0(p.avg)+"%","يعرض التاريخ إن وجد")}${kpi("اتساع السوق",p.breadth.toFixed(2),p.status)}</section>`}
 function topFive(){const top=sorted().slice(0,5);return`<div class="panel"><h3>أفضل 5 فرص اليوم <span>🏆</span></h3><div class="list">${top.map((r,i)=>`<div class="listrow"><span class="rank">${i+1}</span><b>${esc(r.symbol)}</b><span>${fmt0(r.finalConfidence)}%</span><div></div><div class="bar"><span style="width:${Math.min(100,r.finalConfidence)}%"></span></div></div>`).join("")}</div></div>`}
 function pulsePanel(){const p=pulse();return`<div class="panel"><h3>نبض السوق <span>〽</span></h3><div class="ministat"><span>الاتجاه العام</span><b class="${p.breadth>=.5?"pos":"neg"}">${p.status}</b></div><div class="ministat"><span>اتساع السوق</span><b>${p.breadth.toFixed(2)}</b></div><div class="ministat"><span>قوة الشراء</span><b class="pos">${fmt0(p.breadth*100)}%</b></div><div class="ministat"><span>قيمة التداول المقروءة</span><b>${fmtCompact(p.value)}</b></div><div class="segment"><i style="width:${Math.max(5,p.breadth*55)}%"></i><i style="width:25%"></i><i style="width:12%"></i><i style="width:${Math.max(5,(1-p.breadth)*28)}%"></i></div></div>`}
@@ -3370,7 +3370,7 @@ function side(){
     ["dailyBrief","تقرير القرار اليومي","▧"],["stockSearch","بحث وتحليل سهم","⌕"],["sessionMemory","ذاكرة الجلسات","▣"],
     ["historyBackfill","استكمال التاريخ","⏳"],["chartLab","تاريخ وشارت","▥"],["health","صحة التطبيق","◉"],["regressionQA","فحص الثبات","✓"],["settings","الإعدادات","⚙"]
   ];
-  return `<aside class="side"><div class="brand"><div class="logo">EGX</div><div><h1>EGX Pro Hub</h1><div class="sub">Professional Terminal V8.10.1 Multi-Source Intelligence</div></div></div><div class="statusbar"><span class="live">تشغيل تجريبي للجلسة</span><span>${new Date().toLocaleDateString("en-GB")}</span></div><nav class="nav">${nav.map(n=>`<button data-screen="${n[0]}" class="${EGX.screen===n[0]?"active":""}"><span>${n[2]}</span>${n[1]}</button>`).join("")}</nav></aside>`;
+  return `<aside class="side"><div class="brand"><div class="logo">EGX</div><div><h1>EGX Pro Hub</h1><div class="sub">V9.10 Mubasher Market Scan</div></div></div><div class="statusbar"><span class="live">تشغيل تجريبي للجلسة</span><span>${new Date().toLocaleDateString("en-GB")}</span></div><nav class="nav">${nav.map(n=>`<button data-screen="${n[0]}" class="${EGX.screen===n[0]?"active":""}"><span>${n[2]}</span>${n[1]}</button>`).join("")}</nav></aside>`;
 }
 
 
@@ -3504,7 +3504,7 @@ function side(){
     ["dailyBrief","تقرير القرار اليومي","▧"],["stockSearch","بحث وتحليل سهم","⌕"],["sessionMemory","ذاكرة الجلسات","▣"],
     ["historyBackfill","استكمال التاريخ","⏳"],["chartLab","تاريخ وشارت","▥"],["health","صحة التطبيق","◉"],["regressionQA","فحص الثبات","✓"],["settings","الإعدادات","⚙"]
   ];
-  return `<aside class="side"><div class="brand"><div class="logo">EGX</div><div><h1>EGX Pro Hub</h1><div class="sub">Professional Terminal V8.10.1 Multi-Source Intelligence</div></div></div><div class="statusbar"><span class="live">الرئيسية التنفيذية مفعلة</span><span>${new Date().toLocaleDateString("en-GB")}</span></div><nav class="nav">${nav.map(n=>`<button data-screen="${n[0]}" class="${EGX.screen===n[0]?"active":""}"><span>${n[2]}</span>${n[1]}</button>`).join("")}</nav></aside>`;
+  return `<aside class="side"><div class="brand"><div class="logo">EGX</div><div><h1>EGX Pro Hub</h1><div class="sub">V9.10 Mubasher Market Scan</div></div></div><div class="statusbar"><span class="live">الرئيسية التنفيذية مفعلة</span><span>${new Date().toLocaleDateString("en-GB")}</span></div><nav class="nav">${nav.map(n=>`<button data-screen="${n[0]}" class="${EGX.screen===n[0]?"active":""}"><span>${n[2]}</span>${n[1]}</button>`).join("")}</nav></aside>`;
 }
 
 
@@ -3695,7 +3695,7 @@ function renderRecommendationValidationPanel(){
 
 
 
-/* ===================== V9.9.0 Investment Trust Governor UI ===================== */
+/* ===================== V9.10.0 Mubasher Market Scan + Investment Trust Governor UI ===================== */
 (function v990TrustGovernorStyle(){
   try{
     const style=document.createElement('style');
@@ -3755,7 +3755,7 @@ quickJump=function(){
 const __v990OldSide=side;
 side=function(){
   const nav=[['home','الرئيسية التنفيذية','⌂'],['trustGovernor','بوابة موثوقية التوصيات','🛡'],['decisionBoard','القرار الموحد','◎'],['enginesConsole','لوحة التشغيل','⚙'],['recommendationValidation','تحقق التوصيات','☑'],['priceSourceAudit','تدقيق مصدر السعر','⇆'],['preSession','فحص قبل الجلسة','✅'],['dataOps','مركز تدقيق البيانات','▤'],['sourceVerify','تحقق الجلب','🔎'],['priceReconcile','تدقيق الأسعار','⇆'],['dailyOpportunities','الفرص اليومية','◎'],['rankingEngine','محرك الأولويات','≡'],['dashboard','لوحة السوق','⌁'],['portfolio','المحفظة والتقارير الذكية','◈'],['portfolioDecision','قرارات المحفظة','⚖'],['alertsCenter','مركز التنبيهات','🚨'],['dailyBrief','تقرير القرار اليومي','▧'],['stockSearch','بحث وتحليل سهم','⌕'],['sessionMemory','ذاكرة الجلسات','▣'],['historyBackfill','استكمال التاريخ','⏳'],['settings','الإعدادات','⚙']];
-  return `<aside class="side"><div class="brand"><div class="logo">EGX</div><div><h1>EGX Pro Hub</h1><div class="sub">V9.9 Trust Governor</div></div></div><div class="statusbar"><span class="live">بوابة الثقة مفعلة</span><span>${new Date().toLocaleDateString('en-GB')}</span></div><nav class="nav">${nav.map(n=>`<button data-screen="${n[0]}" class="${EGX.screen===n[0]?'active':''}"><span>${n[2]}</span>${n[1]}</button>`).join('')}</nav></aside>`;
+  return `<aside class="side"><div class="brand"><div class="logo">EGX</div><div><h1>EGX Pro Hub</h1><div class="sub">V9.10 Market Scan + Trust Governor</div></div></div><div class="statusbar"><span class="live">بوابة الثقة مفعلة</span><span>${new Date().toLocaleDateString('en-GB')}</span></div><nav class="nav">${nav.map(n=>`<button data-screen="${n[0]}" class="${EGX.screen===n[0]?'active':''}"><span>${n[2]}</span>${n[1]}</button>`).join('')}</nav></aside>`;
 };
 const __v990OldContent=content;
 content=function(){if(EGX.screen==='trustGovernor')return renderTrustGovernor();return __v990OldContent();};
@@ -3766,9 +3766,9 @@ init=async function(){
     const [tg,air]=await Promise.all([loadJson('data/investment-trust-governor.json',{}),loadJson('data/actionable-investment-recommendations.json',{})]);
     EGX.trustGovernor=tg||{};EGX.actionableInvestment=air||{};
     if(tg && Array.isArray(tg.rows) && tg.rows.length){EGX.rows=tg.rows.map(normalizeRow).filter(Boolean);EGX.selected=(sorted()[0]||{}).symbol||EGX.selected;}
-    console.log('V9.9 Trust Governor loaded', tg&&tg.summary);
+    console.log('V9.10 Market Scan + Trust Governor loaded', tg&&tg.summary);
     render();
-  }catch(e){console.warn('V9.9 trust governor load skipped',e)}
+  }catch(e){console.warn('V9.10 trust governor load skipped',e)}
 };
 
 init().catch(e=>{

@@ -1,15 +1,15 @@
 {
-  "name": "egx-pro-hub-web-auto-mubasher-safe",
-  "version": "1.1.0",
+  "name": "egx-pro-hub-v9-10-mubasher-market-scan",
+  "version": "1.2.0",
   "type": "commonjs",
   "scripts": {
     "start": "node server.js",
-    "fetch": "node scripts/fetch-market-data.js",
-    "build:trust": "node scripts/build-price-reconciliation-report.js && node scripts/build-final-opportunity-ranking.js && node scripts/build-multi-source-intelligence.js && node scripts/apply-multisource-intelligence-to-ranking.js && node scripts/build-recommendation-trust-governor.js && node scripts/build-unified-decision-board.js",
-    "validate": "node -c index.html >/dev/null 2>&1 || true; node -c scripts/build-recommendation-trust-governor.js && node -c scripts/build-unified-decision-board.js && node -c scripts/build-multi-source-intelligence.js"
+    "fetch": "node scripts/collect-mubasher-market-scan.js",
+    "build:trust": "node scripts/collect-mubasher-analysis-tools.js && node scripts/build-price-reconciliation-report.js && node scripts/build-final-opportunity-ranking.js && node scripts/build-multi-source-intelligence.js && node scripts/apply-multisource-intelligence-to-ranking.js && node scripts/build-recommendation-trust-governor.js && node scripts/build-unified-decision-board.js",
+    "validate": "node -c scripts/collect-mubasher-market-scan.js && node -c scripts/collect-mubasher-analysis-tools.js && node -c scripts/build-recommendation-trust-governor.js && node -c scripts/build-unified-decision-board.js && node -c scripts/build-multi-source-intelligence.js"
   },
   "engines": {
     "node": "22.x"
   },
-  "description": "EGX Pro Hub static public-delayed market intelligence terminal with strict trust governor"
+  "description": "EGX Pro Hub public-delayed market scanner with Mubasher full-market reality scan and strict trust governor"
 }
