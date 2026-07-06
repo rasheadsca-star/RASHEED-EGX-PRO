@@ -1,0 +1,11 @@
+{
+  "name": "egx-pro-hub-web-auto-mubasher-safe",
+  "version": "1.0.1",
+  "type": "commonjs",
+  "scripts": {
+    "fetch": "node scripts/fetch-market-data.js"
+  },
+  "engines": {
+    "node": "22.x"
+  }
+}
